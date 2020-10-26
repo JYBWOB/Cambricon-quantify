@@ -2,9 +2,6 @@ import os
 os.environ["GLOG_minloglevel"] = '5'
 os.environ['TFU_ENABLE']='1' 
 os.environ['TFU_NET_FILTER']='0' 
-os.environ['CNRT_PRINT_INFO']='false' 
-os.environ['CNRT_GET_HARDWARE_TIME']='false'
-os.environ['CNML_PRINT_INFO']='false'  
 
 import caffe
 import numpy as np
@@ -14,17 +11,18 @@ import cPickle
 
 from pprint import pprint
 
-with open('top1_log_mlu.csv', 'w') as f:
+
+with open('top1_log.csv', 'w') as f:
     f.write('batch,hit,miss,rate\n')
 
-with open('top5_log_mlu.csv', 'w') as f:
+with open('top5_log.csv', 'w') as f:
     f.write('batch,hit,miss,rate\n')
 
 def arg_topK(matrix, K, axis=1):
     full_sort = np.argsort(matrix, axis=axis)
     return full_sort.take(np.arange(-1, -K-1, -1), axis=axis)
 
-prototxt_path = './models/resnet50_qtz_50.prototxt'
+prototxt_path = './models/resnet50.prototxt'
 caffemodel_path = './models/resnet50.caffemodel'
 img_lst_path = './data/image.lst'
 label_path = './data/label.txt'
@@ -48,12 +46,7 @@ labels = [int(x.strip().split(' ')[-1]) for x in labels]
 # labels = labels[:10]
 
 
-caffe.set_mode_mfus()
-#caffe.set_mode_mlu()
-caffe.set_core_number(16)
-caffe.set_batch_size(batch_size)
-caffe.set_simple_flag(1)
-
+caffe.set_mode_cpu()
 caffe.set_rt_core("MLU270")
  # import model 
 model = caffe.Net(prototxt_path, caffemodel_path, caffe.TEST)
@@ -86,7 +79,7 @@ while(cur_index < total_num):
         # RGB 2 BGR
         in_ = in_[..., ::-1]
         
-        # in_ = in_ - np.array((103.939, 116.779, 123.68))   
+        in_ = in_ - np.array((103.939, 116.779, 123.68))   
         
         in_=in_[np.newaxis,:]
         in_ = in_.transpose((0, 3, 1, 2))
@@ -123,7 +116,7 @@ while(cur_index < total_num):
     info = 'batch %d, top1: (hit: %d, miss: %d, hit_rate: %.2f' % (cur_index / test_len, top1_hit_num, test_len - top1_hit_num, 100.0 * top1_hit_num / test_len)
     print(info + '%)')
     
-    with open('top1_log_mlu.csv', 'a') as f:
+    with open('top1_log.csv', 'a') as f:
         f.write('%d, %d,%d,%.2f\n' %  (cur_index / test_len, top1_hit_num, test_len - top1_hit_num, 100.0 * top1_hit_num / test_len))
     
     # top5
@@ -136,7 +129,7 @@ while(cur_index < total_num):
     info = 'batch %d, top5: (hit: %d, miss: %d, hit_rate: %.2f' % (cur_index / test_len, top5_hit_num, test_len - top5_hit_num, 100.0 * top5_hit_num / test_len)
     print(info + '%)')
     
-    with open('top5_log_mlu.csv', 'a') as f:
+    with open('top5_log.csv', 'a') as f:
         f.write('%d, %d,%d,%.2f\n' % (cur_index / test_len, top5_hit_num, test_len - top5_hit_num, 100.0 * top5_hit_num / test_len))
     
 
@@ -147,7 +140,7 @@ print(info + '%')
 
 info = 'top5:: hit: %d, miss: %d, hit_rate: %.2f' % (top5_total_hit_num, total_num - top5_total_hit_num, 100.0 * top5_total_hit_num / total_num)
 print(info + '%')
-with open('final_mlu.csv', 'w') as f:
+with open('final.csv', 'w') as f:
     f.write('type,hit,miss,rate\n')
     f.write('top1,%d,%d,%.2f\n' % (top1_total_hit_num, total_num - top1_total_hit_num, 100.0 * top1_total_hit_num / total_num))
     f.write('top5,%d,%d,%.2f\n' % (top5_total_hit_num, total_num - top5_total_hit_num, 100.0 * top5_total_hit_num / total_num))
