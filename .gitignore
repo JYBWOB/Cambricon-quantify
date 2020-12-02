@@ -1,0 +1,3 @@
+**/*.caffemodel
+**/*.h5
+**/*.npy

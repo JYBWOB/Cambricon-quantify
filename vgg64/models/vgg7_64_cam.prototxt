@@ -1,0 +1,445 @@
+layer {
+name:"input_1"
+top:"input_1"
+type: "Input"
+input_param {
+    shape {
+        dim: 1
+        dim: 3
+        dim: 32
+        dim: 32
+    }
+}
+}
+layer {
+name:"Q_conv2d_1"
+top:"Q_conv2d_1"
+type: "Convolution"
+bottom: "input_1"
+convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+}
+bottom_mlu_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 124.753042
+}
+blobs_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 307.845931
+}
+}
+layer {
+name:"activation_1"
+top:"activation_1"
+type: "ReLU"
+bottom: "Q_conv2d_1"
+}
+layer {
+name:"Q_batch_normalization_1"
+top:"Q_batch_normalization_1"
+type: "BatchNorm"
+bottom: "activation_1"
+batch_norm_param {
+    moving_average_fraction: 0.990000
+    eps: 0.001
+}
+}
+layer {
+name: "Q_batch_normalization_1_scale"
+type: "Scale"
+bottom: "Q_batch_normalization_1"
+top: "Q_batch_normalization_1"
+scale_param {
+    bias_term: true
+}
+}
+layer {
+name:"Q_conv2d_2"
+top:"Q_conv2d_2"
+type: "Convolution"
+bottom: "Q_batch_normalization_1"
+convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+}
+bottom_mlu_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 56.552219
+}
+blobs_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 1252.339347
+}
+}
+layer {
+name:"activation_2"
+top:"activation_2"
+type: "ReLU"
+bottom: "Q_conv2d_2"
+}
+layer {
+name:"Q_batch_normalization_2"
+top:"Q_batch_normalization_2"
+type: "BatchNorm"
+bottom: "activation_2"
+batch_norm_param {
+    moving_average_fraction: 0.990000
+    eps: 0.001
+}
+}
+layer {
+name: "Q_batch_normalization_2_scale"
+type: "Scale"
+bottom: "Q_batch_normalization_2"
+top: "Q_batch_normalization_2"
+scale_param {
+    bias_term: true
+}
+}
+layer {
+name:"Q_max_pooling2d_1"
+top:"Q_max_pooling2d_1"
+type: "Pooling"
+bottom: "Q_batch_normalization_2"
+pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+    pad_h: 0
+    pad_w: 0
+}
+}
+layer {
+name:"Q_dropout_1"
+top:"Q_dropout_1"
+type: "Dropout"
+bottom: "Q_max_pooling2d_1"
+dropout_param {
+    dropout_ratio: 0.000000
+}
+}
+layer {
+name:"Q_conv2d_3"
+top:"Q_conv2d_3"
+type: "Convolution"
+bottom: "Q_dropout_1"
+convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+}
+bottom_mlu_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 23.785943
+}
+blobs_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 1160.810913
+}
+}
+layer {
+name:"activation_3"
+top:"activation_3"
+type: "ReLU"
+bottom: "Q_conv2d_3"
+}
+layer {
+name:"Q_batch_normalization_3"
+top:"Q_batch_normalization_3"
+type: "BatchNorm"
+bottom: "activation_3"
+batch_norm_param {
+    moving_average_fraction: 0.990000
+    eps: 0.001
+}
+}
+layer {
+name: "Q_batch_normalization_3_scale"
+type: "Scale"
+bottom: "Q_batch_normalization_3"
+top: "Q_batch_normalization_3"
+scale_param {
+    bias_term: true
+}
+}
+layer {
+name:"Q_conv2d_4"
+top:"Q_conv2d_4"
+type: "Convolution"
+bottom: "Q_batch_normalization_3"
+convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+}
+bottom_mlu_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 32.928022
+}
+blobs_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 1427.609563
+}
+}
+layer {
+name:"activation_4"
+top:"activation_4"
+type: "ReLU"
+bottom: "Q_conv2d_4"
+}
+layer {
+name:"Q_batch_normalization_4"
+top:"Q_batch_normalization_4"
+type: "BatchNorm"
+bottom: "activation_4"
+batch_norm_param {
+    moving_average_fraction: 0.990000
+    eps: 0.001
+}
+}
+layer {
+name: "Q_batch_normalization_4_scale"
+type: "Scale"
+bottom: "Q_batch_normalization_4"
+top: "Q_batch_normalization_4"
+scale_param {
+    bias_term: true
+}
+}
+layer {
+name:"Q_max_pooling2d_2"
+top:"Q_max_pooling2d_2"
+type: "Pooling"
+bottom: "Q_batch_normalization_4"
+pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+    pad_h: 0
+    pad_w: 0
+}
+}
+layer {
+name:"Q_dropout_2"
+top:"Q_dropout_2"
+type: "Dropout"
+bottom: "Q_max_pooling2d_2"
+dropout_param {
+    dropout_ratio: 0.000000
+}
+}
+layer {
+name:"Q_conv2d_5"
+top:"Q_conv2d_5"
+type: "Convolution"
+bottom: "Q_dropout_2"
+convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+}
+bottom_mlu_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 23.329486
+}
+blobs_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 1509.501911
+}
+}
+layer {
+name:"activation_5"
+top:"activation_5"
+type: "ReLU"
+bottom: "Q_conv2d_5"
+}
+layer {
+name:"Q_batch_normalization_5"
+top:"Q_batch_normalization_5"
+type: "BatchNorm"
+bottom: "activation_5"
+batch_norm_param {
+    moving_average_fraction: 0.990000
+    eps: 0.001
+}
+}
+layer {
+name: "Q_batch_normalization_5_scale"
+type: "Scale"
+bottom: "Q_batch_normalization_5"
+top: "Q_batch_normalization_5"
+scale_param {
+    bias_term: true
+}
+}
+layer {
+name:"Q_conv2d_6"
+top:"Q_conv2d_6"
+type: "Convolution"
+bottom: "Q_batch_normalization_5"
+convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+}
+bottom_mlu_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 33.299481
+}
+blobs_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 2064.861940
+}
+}
+layer {
+name:"activation_6"
+top:"activation_6"
+type: "ReLU"
+bottom: "Q_conv2d_6"
+}
+layer {
+name:"Q_batch_normalization_6"
+top:"Q_batch_normalization_6"
+type: "BatchNorm"
+bottom: "activation_6"
+batch_norm_param {
+    moving_average_fraction: 0.990000
+    eps: 0.001
+}
+}
+layer {
+name: "Q_batch_normalization_6_scale"
+type: "Scale"
+bottom: "Q_batch_normalization_6"
+top: "Q_batch_normalization_6"
+scale_param {
+    bias_term: true
+}
+}
+layer {
+name:"Q_max_pooling2d_3"
+top:"Q_max_pooling2d_3"
+type: "Pooling"
+bottom: "Q_batch_normalization_6"
+pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+    pad_h: 0
+    pad_w: 0
+}
+}
+layer {
+name:"Q_dropout_3"
+top:"Q_dropout_3"
+type: "Dropout"
+bottom: "Q_max_pooling2d_3"
+dropout_param {
+    dropout_ratio: 0.000000
+}
+}
+layer {
+name:"Q_flatten_1"
+top:"Q_flatten_1"
+type: "Flatten"
+bottom: "Q_dropout_3"
+}
+layer {
+name:"Q_dense_1"
+top:"Q_dense_1"
+type: "InnerProduct"
+bottom: "Q_flatten_1"
+inner_product_param {
+    num_output: 1024
+}
+bottom_mlu_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 19.912218
+}
+blobs_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 5034.920261
+}
+}
+layer {
+name:"activation_7"
+top:"activation_7"
+type: "ReLU"
+bottom: "Q_dense_1"
+}
+layer {
+name:"Q_batch_normalization_7"
+top:"Q_batch_normalization_7"
+type: "BatchNorm"
+bottom: "activation_7"
+batch_norm_param {
+    moving_average_fraction: 0.990000
+    eps: 0.001
+}
+}
+layer {
+name: "Q_batch_normalization_7_scale"
+type: "Scale"
+bottom: "Q_batch_normalization_7"
+top: "Q_batch_normalization_7"
+scale_param {
+    bias_term: true
+}
+}
+layer {
+name:"Q_dropout_4"
+top:"Q_dropout_4"
+type: "Dropout"
+bottom: "Q_batch_normalization_7"
+dropout_param {
+    dropout_ratio: 0.500000
+}
+}
+layer {
+name:"Q_dense_2"
+top:"Q_dense_2"
+type: "InnerProduct"
+bottom: "Q_dropout_4"
+inner_product_param {
+    num_output: 10
+}
+bottom_mlu_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 30.088382
+}
+blobs_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 711.225248
+}
+}
+layer {
+name:"activation_8"
+top:"activation_8"
+type: "Softmax"
+bottom: "Q_dense_2"
+}

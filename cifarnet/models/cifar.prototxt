@@ -1,0 +1,183 @@
+layer {
+name:"input_1"
+top:"input_1"
+type: "Input"
+input_param {
+    shape {
+        dim: 1
+        dim: 3
+        dim: 32
+        dim: 32
+    }
+}
+}
+layer {
+name:"Q_conv2d_1"
+top:"Q_conv2d_1"
+type: "Convolution"
+bottom: "input_1"
+convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+}
+}
+layer {
+name:"Q_max_pooling2d_1"
+top:"Q_max_pooling2d_1"
+type: "Pooling"
+bottom: "Q_conv2d_1"
+pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+    pad_h: 0
+    pad_w: 0
+}
+}
+
+layer {
+  name:"slice1"
+  type:"Slice"
+  bottom:"Q_max_pooling2d_1"
+  top:"slice1"
+  top:"slice_tmp1"
+  slice_param {
+    axis:2
+    slice_point:15
+  }
+}
+
+layer {
+  name:"slice2"
+  type:"Slice"
+  bottom:"slice1"
+  top:"slice2"
+  top:"slice_tmp2"
+  slice_param {
+    axis:3
+    slice_point:15
+  }
+}
+
+layer {
+name:"Q_activation_1"
+top:"Q_activation_1"
+type: "ReLU"
+bottom: "slice2"
+}
+layer {
+name:"Q_lrn_1"
+top:"Q_lrn_1"
+type: "LRN"
+bottom: "Q_activation_1"
+lrn_param {
+    alpha: 0.000010
+    beta: 0.750000
+    local_size: 3
+}
+}
+layer {
+name:"Q_conv2d_2"
+top:"Q_conv2d_2"
+type: "Convolution"
+bottom: "Q_lrn_1"
+convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+}
+}
+layer {
+name:"Q_activation_2"
+top:"Q_activation_2"
+type: "ReLU"
+bottom: "Q_conv2d_2"
+}
+layer {
+name:"Q_average_pooling2d_1"
+top:"Q_average_pooling2d_1"
+type: "Pooling"
+bottom: "Q_activation_2"
+pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+    pad_h: 0
+    pad_w: 0
+}
+}
+layer {
+name:"Q_lrn_2"
+top:"Q_lrn_2"
+type: "LRN"
+bottom: "Q_average_pooling2d_1"
+lrn_param {
+    alpha: 0.000010
+    beta: 0.750000
+    local_size: 3
+}
+}
+layer {
+name:"Q_conv2d_3"
+top:"Q_conv2d_3"
+type: "Convolution"
+bottom: "Q_lrn_2"
+convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+}
+}
+layer {
+name:"Q_activation_3"
+top:"Q_activation_3"
+type: "ReLU"
+bottom: "Q_conv2d_3"
+}
+layer {
+name:"Q_average_pooling2d_2"
+top:"Q_average_pooling2d_2"
+type: "Pooling"
+bottom: "Q_activation_3"
+pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+    pad_h: 0
+    pad_w: 0
+}
+}
+layer {
+name:"Q_flatten_1"
+top:"Q_flatten_1"
+type: "Flatten"
+bottom: "Q_average_pooling2d_2"
+}
+layer {
+name:"Q_dropout_1"
+top:"Q_dropout_1"
+type: "Dropout"
+bottom: "Q_flatten_1"
+dropout_param {
+    dropout_ratio: 0.150000
+}
+}
+layer {
+name:"Q_dense_1"
+top:"Q_dense_1"
+type: "InnerProduct"
+bottom: "Q_dropout_1"
+inner_product_param {
+    num_output: 10
+}
+}
+layer {
+name:"activation_4"
+top:"activation_4"
+type: "Softmax"
+bottom: "Q_dense_1"
+}
