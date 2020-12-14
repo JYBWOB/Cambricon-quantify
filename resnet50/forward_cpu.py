@@ -72,11 +72,14 @@ while(cur_index < total_num):
     for img_name in test_lst:
         
         im = Image.open(img_name)
-        im = im.resize((256,256))
-        im = im.convert('RGB')
+#        im = im.resize((256,256))
+#        im = im.convert('RGB')
+#        in_ = np.array(im)
+#        in_ = in_[16:16+224,16:16+224]
+        im = im.resize((224,224))
+        im = im.convert(('RGB'))
         in_ = np.array(im)
-        in_ = in_[16:16+224,16:16+224]
-        # RGB 2 BGR
+	# RGB 2 BGR
         in_ = in_[..., ::-1]
         
         in_ = in_ - np.array((103.939, 116.779, 123.68))   

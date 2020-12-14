@@ -24,8 +24,8 @@ def arg_topK(matrix, K, axis=1):
     full_sort = np.argsort(matrix, axis=axis)
     return full_sort.take(np.arange(-1, -K-1, -1), axis=axis)
 
-prototxt_path = './models/resnet50_qtz_50.prototxt'
-caffemodel_path = './models/resnet50.caffemodel'
+prototxt_path = './models/alexnet_cam.prototxt'
+caffemodel_path = './models/alexnet_cam.caffemodel'
 img_lst_path = './data/image.lst'
 label_path = './data/label.txt'
 
@@ -80,16 +80,14 @@ while(cur_index < total_num):
         
         im = Image.open(img_name)
         # im = im.resize((256,256))
-        # im = im.convert('RGB')
-        # in_ = np.array(im)
-        # in_ = in_[16:16+224,16:16+224]
         im = im.resize((224,224))
-        im = im.convert(('RGB'))
+        im = im.convert('RGB')
         in_ = np.array(im)
+        # in_ = in_[16:16+224,16:16+224]
         # RGB 2 BGR
         in_ = in_[..., ::-1]
         
-        # in_ = in_ - np.array((103.939, 116.779, 123.68))   
+        in_ = in_ - np.array((103.94, 116.78, 123.68))   
         
         in_=in_[np.newaxis,:]
         in_ = in_.transpose((0, 3, 1, 2))
