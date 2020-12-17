@@ -42,41 +42,12 @@ convolution_param {
     kernel_size: 7
     stride: 2
 }
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 27.039844
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 20.215049
-}
-}
-layer {
-name:"Q_bn0"
-top:"Q_bn0"
-type: "BatchNorm"
-bottom: "Q_conv0"
-batch_norm_param {
-    moving_average_fraction: 0.990000
-    eps: 0.001
-}
-}
-layer {
-name: "Q_bn0_scale"
-type: "Scale"
-bottom: "Q_bn0"
-top: "Q_bn0"
-scale_param {
-    bias_term: true
-}
 }
 layer {
 name:"Q_relu0"
 top:"Q_relu0"
 type: "ReLU"
-bottom: "Q_bn0"
+bottom: "Q_conv0"
 }
 layer {
 name:"Q_pooling0"
@@ -126,6 +97,7 @@ batch_norm_param {
     eps: 0.001
 }
 }
+
 layer {
 name: "Q_stage1_unit1_bn1_scale"
 type: "Scale"
@@ -153,41 +125,12 @@ convolution_param {
     kernel_size: 3
     stride: 1
 }
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 50.398650
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 62.474265
-}
-}
-layer {
-name:"Q_stage1_unit1_bn2"
-top:"Q_stage1_unit1_bn2"
-type: "BatchNorm"
-bottom: "Q_stage1_unit1_conv1"
-batch_norm_param {
-    moving_average_fraction: 0.990000
-    eps: 0.001
-}
-}
-layer {
-name: "Q_stage1_unit1_bn2_scale"
-type: "Scale"
-bottom: "Q_stage1_unit1_bn2"
-top: "Q_stage1_unit1_bn2"
-scale_param {
-    bias_term: true
-}
 }
 layer {
 name:"Q_stage1_unit1_relu2"
 top:"Q_stage1_unit1_relu2"
 type: "ReLU"
-bottom: "Q_stage1_unit1_bn2"
+bottom: "Q_stage1_unit1_conv1"
 }
 layer {
 name:"Q_stage1_unit1_conv2"
@@ -201,16 +144,6 @@ convolution_param {
     kernel_size: 3
     stride: 1
 }
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 85.974543
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 68.415728
-}
 }
 layer {
 name:"Q_stage1_unit1_sc"
@@ -222,16 +155,6 @@ convolution_param {
     pad: 0
     kernel_size: 1
     stride: 1
-}
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 49.333122
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 26.559153
 }
 }
 layer {
@@ -281,41 +204,12 @@ convolution_param {
     kernel_size: 3
     stride: 1
 }
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 35.680729
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 52.292737
-}
-}
-layer {
-name:"Q_stage1_unit2_bn2"
-top:"Q_stage1_unit2_bn2"
-type: "BatchNorm"
-bottom: "Q_stage1_unit2_conv1"
-batch_norm_param {
-    moving_average_fraction: 0.990000
-    eps: 0.001
-}
-}
-layer {
-name: "Q_stage1_unit2_bn2_scale"
-type: "Scale"
-bottom: "Q_stage1_unit2_bn2"
-top: "Q_stage1_unit2_bn2"
-scale_param {
-    bias_term: true
-}
 }
 layer {
 name:"Q_stage1_unit2_relu2"
 top:"Q_stage1_unit2_relu2"
 type: "ReLU"
-bottom: "Q_stage1_unit2_bn2"
+bottom: "Q_stage1_unit2_conv1"
 }
 layer {
 name:"Q_stage1_unit2_conv2"
@@ -328,16 +222,6 @@ convolution_param {
     pad_w: 1
     kernel_size: 3
     stride: 1
-}
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 38.527330
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 53.854579
 }
 }
 layer {
@@ -387,41 +271,12 @@ convolution_param {
     kernel_size: 3
     stride: 2
 }
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 58.163733
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 64.594250
-}
-}
-layer {
-name:"Q_stage2_unit1_bn2"
-top:"Q_stage2_unit1_bn2"
-type: "BatchNorm"
-bottom: "Q_stage2_unit1_conv1"
-batch_norm_param {
-    moving_average_fraction: 0.990000
-    eps: 0.001
-}
-}
-layer {
-name: "Q_stage2_unit1_bn2_scale"
-type: "Scale"
-bottom: "Q_stage2_unit1_bn2"
-top: "Q_stage2_unit1_bn2"
-scale_param {
-    bias_term: true
-}
 }
 layer {
 name:"Q_stage2_unit1_relu2"
 top:"Q_stage2_unit1_relu2"
 type: "ReLU"
-bottom: "Q_stage2_unit1_bn2"
+bottom: "Q_stage2_unit1_conv1"
 }
 layer {
 name:"Q_stage2_unit1_conv2"
@@ -435,16 +290,6 @@ convolution_param {
     kernel_size: 3
     stride: 1
 }
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 165.353631
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 78.785801
-}
 }
 layer {
 name:"Q_stage2_unit1_sc"
@@ -456,16 +301,6 @@ convolution_param {
     pad: 0
     kernel_size: 1
     stride: 2
-}
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 57.382507
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 45.293690
 }
 }
 layer {
@@ -515,41 +350,12 @@ convolution_param {
     kernel_size: 3
     stride: 1
 }
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 75.061929
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 83.474615
-}
-}
-layer {
-name:"Q_stage2_unit2_bn2"
-top:"Q_stage2_unit2_bn2"
-type: "BatchNorm"
-bottom: "Q_stage2_unit2_conv1"
-batch_norm_param {
-    moving_average_fraction: 0.990000
-    eps: 0.001
-}
-}
-layer {
-name: "Q_stage2_unit2_bn2_scale"
-type: "Scale"
-bottom: "Q_stage2_unit2_bn2"
-top: "Q_stage2_unit2_bn2"
-scale_param {
-    bias_term: true
-}
 }
 layer {
 name:"Q_stage2_unit2_relu2"
 top:"Q_stage2_unit2_relu2"
 type: "ReLU"
-bottom: "Q_stage2_unit2_bn2"
+bottom: "Q_stage2_unit2_conv1"
 }
 layer {
 name:"Q_stage2_unit2_conv2"
@@ -562,16 +368,6 @@ convolution_param {
     pad_w: 1
     kernel_size: 3
     stride: 1
-}
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 93.156837
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 89.492580
 }
 }
 layer {
@@ -621,41 +417,12 @@ convolution_param {
     kernel_size: 3
     stride: 2
 }
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 114.501695
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 96.194703
-}
-}
-layer {
-name:"Q_stage3_unit1_bn2"
-top:"Q_stage3_unit1_bn2"
-type: "BatchNorm"
-bottom: "Q_stage3_unit1_conv1"
-batch_norm_param {
-    moving_average_fraction: 0.990000
-    eps: 0.001
-}
-}
-layer {
-name: "Q_stage3_unit1_bn2_scale"
-type: "Scale"
-bottom: "Q_stage3_unit1_bn2"
-top: "Q_stage3_unit1_bn2"
-scale_param {
-    bias_term: true
-}
 }
 layer {
 name:"Q_stage3_unit1_relu2"
 top:"Q_stage3_unit1_relu2"
 type: "ReLU"
-bottom: "Q_stage3_unit1_bn2"
+bottom: "Q_stage3_unit1_conv1"
 }
 layer {
 name:"Q_stage3_unit1_conv2"
@@ -669,16 +436,6 @@ convolution_param {
     kernel_size: 3
     stride: 1
 }
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 134.101370
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 114.786817
-}
 }
 layer {
 name:"Q_stage3_unit1_sc"
@@ -690,16 +447,6 @@ convolution_param {
     pad: 0
     kernel_size: 1
     stride: 2
-}
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 109.442805
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 79.971494
 }
 }
 layer {
@@ -749,41 +496,12 @@ convolution_param {
     kernel_size: 3
     stride: 1
 }
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 91.863806
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 127.497812
-}
-}
-layer {
-name:"Q_stage3_unit2_bn2"
-top:"Q_stage3_unit2_bn2"
-type: "BatchNorm"
-bottom: "Q_stage3_unit2_conv1"
-batch_norm_param {
-    moving_average_fraction: 0.990000
-    eps: 0.001
-}
-}
-layer {
-name: "Q_stage3_unit2_bn2_scale"
-type: "Scale"
-bottom: "Q_stage3_unit2_bn2"
-top: "Q_stage3_unit2_bn2"
-scale_param {
-    bias_term: true
-}
 }
 layer {
 name:"Q_stage3_unit2_relu2"
 top:"Q_stage3_unit2_relu2"
 type: "ReLU"
-bottom: "Q_stage3_unit2_bn2"
+bottom: "Q_stage3_unit2_conv1"
 }
 layer {
 name:"Q_stage3_unit2_conv2"
@@ -796,16 +514,6 @@ convolution_param {
     pad_w: 1
     kernel_size: 3
     stride: 1
-}
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 98.596917
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 131.415643
 }
 }
 layer {
@@ -855,41 +563,12 @@ convolution_param {
     kernel_size: 3
     stride: 2
 }
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 154.210647
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 145.255483
-}
-}
-layer {
-name:"Q_stage4_unit1_bn2"
-top:"Q_stage4_unit1_bn2"
-type: "BatchNorm"
-bottom: "Q_stage4_unit1_conv1"
-batch_norm_param {
-    moving_average_fraction: 0.990000
-    eps: 0.001
-}
-}
-layer {
-name: "Q_stage4_unit1_bn2_scale"
-type: "Scale"
-bottom: "Q_stage4_unit1_bn2"
-top: "Q_stage4_unit1_bn2"
-scale_param {
-    bias_term: true
-}
 }
 layer {
 name:"Q_stage4_unit1_relu2"
 top:"Q_stage4_unit1_relu2"
 type: "ReLU"
-bottom: "Q_stage4_unit1_bn2"
+bottom: "Q_stage4_unit1_conv1"
 }
 layer {
 name:"Q_stage4_unit1_conv2"
@@ -903,16 +582,6 @@ convolution_param {
     kernel_size: 3
     stride: 1
 }
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 182.099662
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 178.128406
-}
 }
 layer {
 name:"Q_stage4_unit1_sc"
@@ -924,16 +593,6 @@ convolution_param {
     pad: 0
     kernel_size: 1
     stride: 2
-}
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 139.026480
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 101.767563
 }
 }
 layer {
@@ -983,41 +642,12 @@ convolution_param {
     kernel_size: 3
     stride: 1
 }
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 182.566648
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 179.119417
-}
-}
-layer {
-name:"Q_stage4_unit2_bn2"
-top:"Q_stage4_unit2_bn2"
-type: "BatchNorm"
-bottom: "Q_stage4_unit2_conv1"
-batch_norm_param {
-    moving_average_fraction: 0.990000
-    eps: 0.001
-}
-}
-layer {
-name: "Q_stage4_unit2_bn2_scale"
-type: "Scale"
-bottom: "Q_stage4_unit2_bn2"
-top: "Q_stage4_unit2_bn2"
-scale_param {
-    bias_term: true
-}
 }
 layer {
 name:"Q_stage4_unit2_relu2"
 top:"Q_stage4_unit2_relu2"
 type: "ReLU"
-bottom: "Q_stage4_unit2_bn2"
+bottom: "Q_stage4_unit2_conv1"
 }
 layer {
 name:"Q_stage4_unit2_conv2"
@@ -1030,16 +660,6 @@ convolution_param {
     pad_w: 1
     kernel_size: 3
     stride: 1
-}
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 128.024709
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 201.807841
 }
 }
 layer {
@@ -1094,16 +714,6 @@ type: "InnerProduct"
 bottom: "Q_pool1"
 inner_product_param {
     num_output: 1000
-}
-bottom_mlu_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 146.300763
-}
-blobs_dtype {
-    type: DT_INT8
-    position: 0
-    scale: 74.840031
 }
 }
 layer {

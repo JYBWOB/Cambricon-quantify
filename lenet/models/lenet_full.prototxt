@@ -1,0 +1,168 @@
+layer {
+name:"input_1"
+top:"input_1"
+type: "Input"
+input_param {
+    shape {
+        dim: 1
+        dim: 1
+        dim: 28
+        dim: 28
+    }
+}
+}
+layer {
+name:"conv2d_1"
+top:"conv2d_1"
+type: "Convolution"
+bottom: "input_1"
+convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+}
+}
+layer {
+name: "conv2d_1_relu"
+type: "ReLU"
+bottom: "conv2d_1"
+top: "conv2d_1"
+}
+layer {
+name:"batch_normalization_1"
+top:"batch_normalization_1"
+type: "BatchNorm"
+bottom: "conv2d_1"
+batch_norm_param {
+    moving_average_fraction: 0.990000
+    eps: 0.001
+}
+}
+layer {
+name: "batch_normalization_1_scale"
+type: "Scale"
+bottom: "batch_normalization_1"
+top: "batch_normalization_1"
+scale_param {
+    bias_term: true
+}
+}
+layer {
+name:"max_pooling2d_1"
+top:"max_pooling2d_1"
+type: "Pooling"
+bottom: "batch_normalization_1"
+pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+    pad_h: 0
+    pad_w: 0
+}
+}
+layer {
+name:"conv2d_2"
+top:"conv2d_2"
+type: "Convolution"
+bottom: "max_pooling2d_1"
+convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+}
+}
+layer {
+name: "conv2d_2_relu"
+type: "ReLU"
+bottom: "conv2d_2"
+top: "conv2d_2"
+}
+layer {
+name:"batch_normalization_2"
+top:"batch_normalization_2"
+type: "BatchNorm"
+bottom: "conv2d_2"
+batch_norm_param {
+    moving_average_fraction: 0.990000
+    eps: 0.001
+}
+}
+layer {
+name: "batch_normalization_2_scale"
+type: "Scale"
+bottom: "batch_normalization_2"
+top: "batch_normalization_2"
+scale_param {
+    bias_term: true
+}
+}
+layer {
+name:"max_pooling2d_2"
+top:"max_pooling2d_2"
+type: "Pooling"
+bottom: "batch_normalization_2"
+pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+    pad_h: 0
+    pad_w: 0
+}
+}
+layer {
+name:"flatten_1"
+top:"flatten_1"
+type: "Flatten"
+bottom: "max_pooling2d_2"
+}
+layer {
+name:"dense_1"
+top:"dense_1"
+type: "InnerProduct"
+bottom: "flatten_1"
+inner_product_param {
+    num_output: 512
+}
+}
+layer {
+name: "dense_1_relu"
+type: "ReLU"
+bottom: "dense_1"
+top: "dense_1"
+}
+layer {
+name:"batch_normalization_3"
+top:"batch_normalization_3"
+type: "BatchNorm"
+bottom: "dense_1"
+batch_norm_param {
+    moving_average_fraction: 0.990000
+    eps: 0.001
+}
+}
+layer {
+name: "batch_normalization_3_scale"
+type: "Scale"
+bottom: "batch_normalization_3"
+top: "batch_normalization_3"
+scale_param {
+    bias_term: true
+}
+}
+layer {
+name:"dense_2"
+top:"dense_2"
+type: "InnerProduct"
+bottom: "batch_normalization_3"
+inner_product_param {
+    num_output: 10
+}
+}
+layer {
+name: "dense_2_relu"
+type: "Softmax"
+bottom: "dense_2"
+top: "dense_2"
+}

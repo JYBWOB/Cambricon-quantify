@@ -1,0 +1,183 @@
+layer {
+name:"input_1"
+top:"input_1"
+type: "Input"
+input_param {
+    shape {
+        dim: 1
+        dim: 3
+        dim: 32
+        dim: 32
+    }
+}
+}
+layer {
+name:"conv2d_1"
+top:"conv2d_1"
+type: "Convolution"
+bottom: "input_1"
+convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+}
+}
+layer {
+name:"max_pooling2d_1"
+top:"max_pooling2d_1"
+type: "Pooling"
+bottom: "conv2d_1"
+pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+    pad_h: 0
+    pad_w: 0
+}
+}
+
+layer {
+  name:"slice1"
+  type:"Slice"
+  bottom:"max_pooling2d_1"
+  top:"slice1"
+  top:"slice_tmp1"
+  slice_param {
+    axis:2
+    slice_point:15
+  }
+}
+
+layer {
+  name:"slice2"
+  type:"Slice"
+  bottom:"slice1"
+  top:"slice2"
+  top:"slice_tmp2"
+  slice_param {
+    axis:3
+    slice_point:15
+  }
+}
+
+layer {
+name:"activation_1"
+top:"activation_1"
+type: "ReLU"
+bottom: "slice2"
+}
+layer {
+name:"lrn_1"
+top:"lrn_1"
+type: "LRN"
+bottom: "activation_1"
+lrn_param {
+    alpha: 0.000010
+    beta: 0.750000
+    local_size: 3
+}
+}
+layer {
+name:"conv2d_2"
+top:"conv2d_2"
+type: "Convolution"
+bottom: "lrn_1"
+convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+}
+}
+layer {
+name:"activation_2"
+top:"activation_2"
+type: "ReLU"
+bottom: "conv2d_2"
+}
+layer {
+name:"average_pooling2d_1"
+top:"average_pooling2d_1"
+type: "Pooling"
+bottom: "activation_2"
+pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+    pad_h: 0
+    pad_w: 0
+}
+}
+layer {
+name:"lrn_2"
+top:"lrn_2"
+type: "LRN"
+bottom: "average_pooling2d_1"
+lrn_param {
+    alpha: 0.000010
+    beta: 0.750000
+    local_size: 3
+}
+}
+layer {
+name:"conv2d_3"
+top:"conv2d_3"
+type: "Convolution"
+bottom: "lrn_2"
+convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+}
+}
+layer {
+name:"activation_3"
+top:"activation_3"
+type: "ReLU"
+bottom: "conv2d_3"
+}
+layer {
+name:"average_pooling2d_2"
+top:"average_pooling2d_2"
+type: "Pooling"
+bottom: "activation_3"
+pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+    pad_h: 0
+    pad_w: 0
+}
+}
+layer {
+name:"flatten_1"
+top:"flatten_1"
+type: "Flatten"
+bottom: "average_pooling2d_2"
+}
+layer {
+name:"dropout_1"
+top:"dropout_1"
+type: "Dropout"
+bottom: "flatten_1"
+dropout_param {
+    dropout_ratio: 0.150000
+}
+}
+layer {
+name:"dense_1"
+top:"dense_1"
+type: "InnerProduct"
+bottom: "dropout_1"
+inner_product_param {
+    num_output: 10
+}
+}
+layer {
+name: "dense_1_relu"
+type: "Softmax"
+bottom: "dense_1"
+top: "dense_1"
+}

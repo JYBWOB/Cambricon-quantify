@@ -39,8 +39,9 @@ y_test = y_test.reshape((total_num, 1))
 # exit(0)
 
 
-caffe.set_mode_mfus()
+# caffe.set_mode_mfus()
 #caffe.set_mode_mlu()
+caffe.set_mode_cpu()
 caffe.set_core_number(16)
 caffe.set_batch_size(batch_size)
 caffe.set_simple_flag(1)
@@ -48,6 +49,7 @@ caffe.set_simple_flag(1)
 caffe.set_rt_core("MLU270")
  # import model 
 model = caffe.Net(prototxt_path, caffemodel_path, caffe.TEST)
+model.blobs['input_1'].reshape(*(batch_size, 1, 28, 28))
 
 top1_total_hit_num = 0
 # top5_total_hit_num = 0

@@ -1,0 +1,1704 @@
+layer {
+  name: "data"
+  type: "Input"
+  top: "input_1"
+  input_param {
+    shape {
+      dim: 1
+      dim: 3
+      dim: 224
+      dim: 224
+    }
+  }
+}
+layer {
+  name: "conv1"
+  type: "Convolution"
+  bottom: "input_1"
+  top: "conv1"
+  convolution_param {
+    num_output: 64
+    kernel_size: 7
+    stride: 2
+    pad_h: 3
+    pad_w: 3
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: 1
+    scale: 1.6814399
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -12
+    scale: 1.3367245
+  }
+}
+layer {
+  name: "activation_1"
+  type: "ReLU"
+  bottom: "conv1"
+  top: "activation_1"
+}
+layer {
+  name: "max_pooling2d_1"
+  type: "Pooling"
+  bottom: "activation_1"
+  top: "max_pooling2d_1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+    pad_h: 1
+    pad_w: 1
+  }
+}
+layer {
+  name: "slice1"
+  type: "Slice"
+  bottom: "max_pooling2d_1"
+  top: "slice1"
+  top: "slice_tmp1"
+  slice_param {
+    slice_point: 56
+    axis: 2
+  }
+}
+layer {
+  name: "slice2"
+  type: "Slice"
+  bottom: "slice1"
+  top: "slice2"
+  top: "slice_tmp2"
+  slice_param {
+    slice_point: 56
+    axis: 3
+  }
+}
+layer {
+  name: "res2a_branch2a"
+  type: "Convolution"
+  bottom: "slice2"
+  top: "res2a_branch2a"
+  convolution_param {
+    num_output: 64
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.1009538
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -7
+    scale: 1.1806105
+  }
+}
+layer {
+  name: "activation_2"
+  type: "ReLU"
+  bottom: "res2a_branch2a"
+  top: "activation_2"
+}
+layer {
+  name: "res2a_branch2b"
+  type: "Convolution"
+  bottom: "activation_2"
+  top: "res2a_branch2b"
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.5152062
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -8
+    scale: 1.6281333
+  }
+}
+layer {
+  name: "activation_3"
+  type: "ReLU"
+  bottom: "res2a_branch2b"
+  top: "activation_3"
+}
+layer {
+  name: "res2a_branch2c"
+  type: "Convolution"
+  bottom: "activation_3"
+  top: "res2a_branch2c"
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.2629327
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.1342647
+  }
+}
+layer {
+  name: "res2a_branch1"
+  type: "Convolution"
+  bottom: "slice2"
+  top: "res2a_branch1"
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.1009538
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.1871032
+  }
+}
+layer {
+  name: "add_1"
+  type: "Eltwise"
+  bottom: "res2a_branch2c"
+  bottom: "res2a_branch1"
+  top: "add_1"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "activation_4"
+  type: "ReLU"
+  bottom: "add_1"
+  top: "activation_4"
+}
+layer {
+  name: "res2b_branch2a"
+  type: "Convolution"
+  bottom: "activation_4"
+  top: "res2b_branch2a"
+  convolution_param {
+    num_output: 64
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.9515144
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -7
+    scale: 1.5042735
+  }
+}
+layer {
+  name: "activation_5"
+  type: "ReLU"
+  bottom: "res2b_branch2a"
+  top: "activation_5"
+}
+layer {
+  name: "res2b_branch2b"
+  type: "Convolution"
+  bottom: "activation_5"
+  top: "res2b_branch2b"
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.4007494
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -7
+    scale: 1.6470702
+  }
+}
+layer {
+  name: "activation_6"
+  type: "ReLU"
+  bottom: "res2b_branch2b"
+  top: "activation_6"
+}
+layer {
+  name: "res2b_branch2c"
+  type: "Convolution"
+  bottom: "activation_6"
+  top: "res2b_branch2c"
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.5860538
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.4002117
+  }
+}
+layer {
+  name: "add_2"
+  type: "Eltwise"
+  bottom: "res2b_branch2c"
+  bottom: "activation_4"
+  top: "add_2"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "activation_7"
+  type: "ReLU"
+  bottom: "add_2"
+  top: "activation_7"
+}
+layer {
+  name: "res2c_branch2a"
+  type: "Convolution"
+  bottom: "activation_7"
+  top: "res2c_branch2a"
+  convolution_param {
+    num_output: 64
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.9213363
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -8
+    scale: 1.4088079
+  }
+}
+layer {
+  name: "activation_8"
+  type: "ReLU"
+  bottom: "res2c_branch2a"
+  top: "activation_8"
+}
+layer {
+  name: "res2c_branch2b"
+  type: "Convolution"
+  bottom: "activation_8"
+  top: "res2c_branch2b"
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.2604314
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -8
+    scale: 1.2040564
+  }
+}
+layer {
+  name: "activation_9"
+  type: "ReLU"
+  bottom: "res2c_branch2b"
+  top: "activation_9"
+}
+layer {
+  name: "res2c_branch2c"
+  type: "Convolution"
+  bottom: "activation_9"
+  top: "res2c_branch2c"
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.0843674
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.6291236
+  }
+}
+layer {
+  name: "add_3"
+  type: "Eltwise"
+  bottom: "res2c_branch2c"
+  bottom: "activation_7"
+  top: "add_3"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "activation_10"
+  type: "ReLU"
+  bottom: "add_3"
+  top: "activation_10"
+}
+layer {
+  name: "res3a_branch2a"
+  type: "Convolution"
+  bottom: "activation_10"
+  top: "res3a_branch2a"
+  convolution_param {
+    num_output: 128
+    pad: 0
+    kernel_size: 1
+    stride: 2
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.7911105
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -8
+    scale: 1.0859576
+  }
+}
+layer {
+  name: "activation_11"
+  type: "ReLU"
+  bottom: "res3a_branch2a"
+  top: "activation_11"
+}
+layer {
+  name: "res3a_branch2b"
+  type: "Convolution"
+  bottom: "activation_11"
+  top: "res3a_branch2b"
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.499437
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -8
+    scale: 1.252584
+  }
+}
+layer {
+  name: "activation_12"
+  type: "ReLU"
+  bottom: "res3a_branch2b"
+  top: "activation_12"
+}
+layer {
+  name: "res3a_branch2c"
+  type: "Convolution"
+  bottom: "activation_12"
+  top: "res3a_branch2c"
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.8744849
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.0294442
+  }
+}
+layer {
+  name: "res3a_branch1"
+  type: "Convolution"
+  bottom: "activation_10"
+  top: "res3a_branch1"
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 2
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.7911105
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -7
+    scale: 1.056455
+  }
+}
+layer {
+  name: "add_4"
+  type: "Eltwise"
+  bottom: "res3a_branch2c"
+  bottom: "res3a_branch1"
+  top: "add_4"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "activation_13"
+  type: "ReLU"
+  bottom: "add_4"
+  top: "activation_13"
+}
+layer {
+  name: "res3b_branch2a"
+  type: "Convolution"
+  bottom: "activation_13"
+  top: "res3b_branch2a"
+  convolution_param {
+    num_output: 128
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.721693
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -8
+    scale: 1.9316398
+  }
+}
+layer {
+  name: "activation_14"
+  type: "ReLU"
+  bottom: "res3b_branch2a"
+  top: "activation_14"
+}
+layer {
+  name: "res3b_branch2b"
+  type: "Convolution"
+  bottom: "activation_14"
+  top: "res3b_branch2b"
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.9207864
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -8
+    scale: 1.2101841
+  }
+}
+layer {
+  name: "activation_15"
+  type: "ReLU"
+  bottom: "res3b_branch2b"
+  top: "activation_15"
+}
+layer {
+  name: "res3b_branch2c"
+  type: "Convolution"
+  bottom: "activation_15"
+  top: "res3b_branch2c"
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.6422347
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -5
+    scale: 1.8602061
+  }
+}
+layer {
+  name: "add_5"
+  type: "Eltwise"
+  bottom: "res3b_branch2c"
+  bottom: "activation_13"
+  top: "add_5"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "activation_16"
+  type: "ReLU"
+  bottom: "add_5"
+  top: "activation_16"
+}
+layer {
+  name: "res3c_branch2a"
+  type: "Convolution"
+  bottom: "activation_16"
+  top: "res3c_branch2a"
+  convolution_param {
+    num_output: 128
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.7166091
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -7
+    scale: 1.119645
+  }
+}
+layer {
+  name: "activation_17"
+  type: "ReLU"
+  bottom: "res3c_branch2a"
+  top: "activation_17"
+}
+layer {
+  name: "res3c_branch2b"
+  type: "Convolution"
+  bottom: "activation_17"
+  top: "res3c_branch2b"
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.4605705
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.3827773
+  }
+}
+layer {
+  name: "activation_18"
+  type: "ReLU"
+  bottom: "res3c_branch2b"
+  top: "activation_18"
+}
+layer {
+  name: "res3c_branch2c"
+  type: "Convolution"
+  bottom: "activation_18"
+  top: "res3c_branch2c"
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -1
+    scale: 1.1770898
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.0376369
+  }
+}
+layer {
+  name: "add_6"
+  type: "Eltwise"
+  bottom: "res3c_branch2c"
+  bottom: "activation_16"
+  top: "add_6"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "activation_19"
+  type: "ReLU"
+  bottom: "add_6"
+  top: "activation_19"
+}
+layer {
+  name: "res3d_branch2a"
+  type: "Convolution"
+  bottom: "activation_19"
+  top: "res3d_branch2a"
+  convolution_param {
+    num_output: 128
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.4894772
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -7
+    scale: 1.8803759
+  }
+}
+layer {
+  name: "activation_20"
+  type: "ReLU"
+  bottom: "res3d_branch2a"
+  top: "activation_20"
+}
+layer {
+  name: "res3d_branch2b"
+  type: "Convolution"
+  bottom: "activation_20"
+  top: "res3d_branch2b"
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.2215935
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -8
+    scale: 1.2289255
+  }
+}
+layer {
+  name: "activation_21"
+  type: "ReLU"
+  bottom: "res3d_branch2b"
+  top: "activation_21"
+}
+layer {
+  name: "res3d_branch2c"
+  type: "Convolution"
+  bottom: "activation_21"
+  top: "res3d_branch2c"
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.5093426
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.7902454
+  }
+}
+layer {
+  name: "add_7"
+  type: "Eltwise"
+  bottom: "res3d_branch2c"
+  bottom: "activation_19"
+  top: "add_7"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "activation_22"
+  type: "ReLU"
+  bottom: "add_7"
+  top: "activation_22"
+}
+layer {
+  name: "res4a_branch2a"
+  type: "Convolution"
+  bottom: "activation_22"
+  top: "res4a_branch2a"
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 2
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.3415312
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -7
+    scale: 1.9888476
+  }
+}
+layer {
+  name: "activation_23"
+  type: "ReLU"
+  bottom: "res4a_branch2a"
+  top: "activation_23"
+}
+layer {
+  name: "res4a_branch2b"
+  type: "Convolution"
+  bottom: "activation_23"
+  top: "res4a_branch2b"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.0669551
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -8
+    scale: 1.8523132
+  }
+}
+layer {
+  name: "activation_24"
+  type: "ReLU"
+  bottom: "res4a_branch2b"
+  top: "activation_24"
+}
+layer {
+  name: "res4a_branch2c"
+  type: "Convolution"
+  bottom: "activation_24"
+  top: "res4a_branch2c"
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.5547966
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.1862384
+  }
+}
+layer {
+  name: "res4a_branch1"
+  type: "Convolution"
+  bottom: "activation_22"
+  top: "res4a_branch1"
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 2
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.3415312
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -7
+    scale: 1.6683637
+  }
+}
+layer {
+  name: "add_8"
+  type: "Eltwise"
+  bottom: "res4a_branch2c"
+  bottom: "res4a_branch1"
+  top: "add_8"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "activation_25"
+  type: "ReLU"
+  bottom: "add_8"
+  top: "activation_25"
+}
+layer {
+  name: "res4b_branch2a"
+  type: "Convolution"
+  bottom: "activation_25"
+  top: "res4b_branch2a"
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.6813691
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -8
+    scale: 1.2722846
+  }
+}
+layer {
+  name: "activation_26"
+  type: "ReLU"
+  bottom: "res4b_branch2a"
+  top: "activation_26"
+}
+layer {
+  name: "res4b_branch2b"
+  type: "Convolution"
+  bottom: "activation_26"
+  top: "res4b_branch2b"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.066102
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -7
+    scale: 1.0336868
+  }
+}
+layer {
+  name: "activation_27"
+  type: "ReLU"
+  bottom: "res4b_branch2b"
+  top: "activation_27"
+}
+layer {
+  name: "res4b_branch2c"
+  type: "Convolution"
+  bottom: "activation_27"
+  top: "res4b_branch2c"
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.1870596
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.0580635
+  }
+}
+layer {
+  name: "add_9"
+  type: "Eltwise"
+  bottom: "res4b_branch2c"
+  bottom: "activation_25"
+  top: "add_9"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "activation_28"
+  type: "ReLU"
+  bottom: "add_9"
+  top: "activation_28"
+}
+layer {
+  name: "res4c_branch2a"
+  type: "Convolution"
+  bottom: "activation_28"
+  top: "res4c_branch2a"
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.4820178
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -8
+    scale: 1.4438769
+  }
+}
+layer {
+  name: "activation_29"
+  type: "ReLU"
+  bottom: "res4c_branch2a"
+  top: "activation_29"
+}
+layer {
+  name: "res4c_branch2b"
+  type: "Convolution"
+  bottom: "activation_29"
+  top: "res4c_branch2b"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.1165602
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -7
+    scale: 1.0901074
+  }
+}
+layer {
+  name: "activation_30"
+  type: "ReLU"
+  bottom: "res4c_branch2b"
+  top: "activation_30"
+}
+layer {
+  name: "res4c_branch2c"
+  type: "Convolution"
+  bottom: "activation_30"
+  top: "res4c_branch2c"
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.3909214
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.2155297
+  }
+}
+layer {
+  name: "add_10"
+  type: "Eltwise"
+  bottom: "res4c_branch2c"
+  bottom: "activation_28"
+  top: "add_10"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "activation_31"
+  type: "ReLU"
+  bottom: "add_10"
+  top: "activation_31"
+}
+layer {
+  name: "res4d_branch2a"
+  type: "Convolution"
+  bottom: "activation_31"
+  top: "res4d_branch2a"
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.4879745
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -8
+    scale: 1.2205155
+  }
+}
+layer {
+  name: "activation_32"
+  type: "ReLU"
+  bottom: "res4d_branch2a"
+  top: "activation_32"
+}
+layer {
+  name: "res4d_branch2b"
+  type: "Convolution"
+  bottom: "activation_32"
+  top: "res4d_branch2b"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.0442065
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -7
+    scale: 1.5777388
+  }
+}
+layer {
+  name: "activation_33"
+  type: "ReLU"
+  bottom: "res4d_branch2b"
+  top: "activation_33"
+}
+layer {
+  name: "res4d_branch2c"
+  type: "Convolution"
+  bottom: "activation_33"
+  top: "res4d_branch2c"
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.1279572
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.2179492
+  }
+}
+layer {
+  name: "add_11"
+  type: "Eltwise"
+  bottom: "res4d_branch2c"
+  bottom: "activation_31"
+  top: "add_11"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "activation_34"
+  type: "ReLU"
+  bottom: "add_11"
+  top: "activation_34"
+}
+layer {
+  name: "res4e_branch2a"
+  type: "Convolution"
+  bottom: "activation_34"
+  top: "res4e_branch2a"
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.4715868
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -8
+    scale: 1.1486069
+  }
+}
+layer {
+  name: "activation_35"
+  type: "ReLU"
+  bottom: "res4e_branch2a"
+  top: "activation_35"
+}
+layer {
+  name: "res4e_branch2b"
+  type: "Convolution"
+  bottom: "activation_35"
+  top: "res4e_branch2b"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.4105235
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -7
+    scale: 1.4580691
+  }
+}
+layer {
+  name: "activation_36"
+  type: "ReLU"
+  bottom: "res4e_branch2b"
+  top: "activation_36"
+}
+layer {
+  name: "res4e_branch2c"
+  type: "Convolution"
+  bottom: "activation_36"
+  top: "res4e_branch2c"
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.7986852
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.5563285
+  }
+}
+layer {
+  name: "add_12"
+  type: "Eltwise"
+  bottom: "res4e_branch2c"
+  bottom: "activation_34"
+  top: "add_12"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "activation_37"
+  type: "ReLU"
+  bottom: "add_12"
+  top: "activation_37"
+}
+layer {
+  name: "res4f_branch2a"
+  type: "Convolution"
+  bottom: "activation_37"
+  top: "res4f_branch2a"
+  convolution_param {
+    num_output: 256
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.3654276
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -8
+    scale: 1.1729134
+  }
+}
+layer {
+  name: "activation_38"
+  type: "ReLU"
+  bottom: "res4f_branch2a"
+  top: "activation_38"
+}
+layer {
+  name: "res4f_branch2b"
+  type: "Convolution"
+  bottom: "activation_38"
+  top: "res4f_branch2b"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.4639052
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -7
+    scale: 1.8830931
+  }
+}
+layer {
+  name: "activation_39"
+  type: "ReLU"
+  bottom: "res4f_branch2b"
+  top: "activation_39"
+}
+layer {
+  name: "res4f_branch2c"
+  type: "Convolution"
+  bottom: "activation_39"
+  top: "res4f_branch2c"
+  convolution_param {
+    num_output: 1024
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -1
+    scale: 1.7525618
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.4689479
+  }
+}
+layer {
+  name: "add_13"
+  type: "Eltwise"
+  bottom: "res4f_branch2c"
+  bottom: "activation_37"
+  top: "add_13"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "activation_40"
+  type: "ReLU"
+  bottom: "add_13"
+  top: "activation_40"
+}
+layer {
+  name: "res5a_branch2a"
+  type: "Convolution"
+  bottom: "activation_40"
+  top: "res5a_branch2a"
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 2
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.2442639
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -8
+    scale: 1.4693367
+  }
+}
+layer {
+  name: "activation_41"
+  type: "ReLU"
+  bottom: "res5a_branch2a"
+  top: "activation_41"
+}
+layer {
+  name: "res5a_branch2b"
+  type: "Convolution"
+  bottom: "activation_41"
+  top: "res5a_branch2b"
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.7031803
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -7
+    scale: 1.7877114
+  }
+}
+layer {
+  name: "activation_42"
+  type: "ReLU"
+  bottom: "res5a_branch2b"
+  top: "activation_42"
+}
+layer {
+  name: "res5a_branch2c"
+  type: "Convolution"
+  bottom: "activation_42"
+  top: "res5a_branch2c"
+  convolution_param {
+    num_output: 2048
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -4
+    scale: 1.0711651
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -4
+    scale: 1.7131068
+  }
+}
+layer {
+  name: "res5a_branch1"
+  type: "Convolution"
+  bottom: "activation_40"
+  top: "res5a_branch1"
+  convolution_param {
+    num_output: 2048
+    pad: 0
+    kernel_size: 1
+    stride: 2
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.2442639
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -5
+    scale: 1.4069321
+  }
+}
+layer {
+  name: "add_14"
+  type: "Eltwise"
+  bottom: "res5a_branch2c"
+  bottom: "res5a_branch1"
+  top: "add_14"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "activation_43"
+  type: "ReLU"
+  bottom: "add_14"
+  top: "activation_43"
+}
+layer {
+  name: "res5b_branch2a"
+  type: "Convolution"
+  bottom: "activation_43"
+  top: "res5b_branch2a"
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -1
+    scale: 1.2685583
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -9
+    scale: 1.9529591
+  }
+}
+layer {
+  name: "activation_44"
+  type: "ReLU"
+  bottom: "res5b_branch2a"
+  top: "activation_44"
+}
+layer {
+  name: "res5b_branch2b"
+  type: "Convolution"
+  bottom: "activation_44"
+  top: "res5b_branch2b"
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -3
+    scale: 1.9823064
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -7
+    scale: 1.2043506
+  }
+}
+layer {
+  name: "activation_45"
+  type: "ReLU"
+  bottom: "res5b_branch2b"
+  top: "activation_45"
+}
+layer {
+  name: "res5b_branch2c"
+  type: "Convolution"
+  bottom: "activation_45"
+  top: "res5b_branch2c"
+  convolution_param {
+    num_output: 2048
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -4
+    scale: 1.0060529
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -5
+    scale: 1.1209043
+  }
+}
+layer {
+  name: "add_15"
+  type: "Eltwise"
+  bottom: "res5b_branch2c"
+  bottom: "activation_43"
+  top: "add_15"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "activation_46"
+  type: "ReLU"
+  bottom: "add_15"
+  top: "activation_46"
+}
+layer {
+  name: "res5c_branch2a"
+  type: "Convolution"
+  bottom: "activation_46"
+  top: "res5c_branch2a"
+  convolution_param {
+    num_output: 512
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -1
+    scale: 1.179497
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -9
+    scale: 1.9790795
+  }
+}
+layer {
+  name: "activation_47"
+  type: "ReLU"
+  bottom: "res5c_branch2a"
+  top: "activation_47"
+}
+layer {
+  name: "res5c_branch2b"
+  type: "Convolution"
+  bottom: "activation_47"
+  top: "res5c_branch2b"
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -4
+    scale: 1.1699369
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -8
+    scale: 1.2642229
+  }
+}
+layer {
+  name: "activation_48"
+  type: "ReLU"
+  bottom: "res5c_branch2b"
+  top: "activation_48"
+}
+layer {
+  name: "res5c_branch2c"
+  type: "Convolution"
+  bottom: "activation_48"
+  top: "res5c_branch2c"
+  convolution_param {
+    num_output: 2048
+    pad: 0
+    kernel_size: 1
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -4
+    scale: 1.0430281
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -4
+    scale: 1.4963465
+  }
+}
+layer {
+  name: "add_16"
+  type: "Eltwise"
+  bottom: "res5c_branch2c"
+  bottom: "activation_46"
+  top: "add_16"
+  eltwise_param {
+    operation: SUM
+  }
+}
+layer {
+  name: "activation_49"
+  type: "ReLU"
+  bottom: "add_16"
+  top: "activation_49"
+}
+layer {
+  name: "avg_pool"
+  type: "Pooling"
+  bottom: "activation_49"
+  top: "avg_pool"
+  pooling_param {
+    pool: AVE
+    global_pooling: true
+  }
+}
+layer {
+  name: "fc1000"
+  type: "InnerProduct"
+  bottom: "avg_pool"
+  top: "fc1000"
+  inner_product_param {
+    num_output: 1000
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -2
+    scale: 1.2496772
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -7
+    scale: 1.3477898
+  }
+}
+layer {
+  name: "fc1000_relu"
+  type: "Softmax"
+  bottom: "fc1000"
+  top: "fc1000"
+}

@@ -15,8 +15,8 @@ def arg_topK(matrix, K, axis=1):
     full_sort = np.argsort(matrix, axis=axis)
     return full_sort.take(np.arange(-1, -K-1, -1), axis=axis)
 
-prototxt_path = './models/lenet_cam.prototxt'
-caffemodel_path = './models/lenet_cam.caffemodel'
+prototxt_path = './models/lenet_qtz.prototxt'
+caffemodel_path = './models/lenet_full.caffemodel'
 
 batch_size = 50
 
