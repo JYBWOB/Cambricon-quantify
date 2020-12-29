@@ -1,0 +1,509 @@
+layer {
+  name: "data"
+  type: "Input"
+  top: "input_1"
+  input_param {
+    shape {
+      dim: 1
+      dim: 3
+      dim: 224
+      dim: 224
+    }
+  }
+}
+layer {
+  name: "conv2d_1"
+  type: "Convolution"
+  bottom: "input_1"
+  top: "conv2d_1"
+  convolution_param {
+    num_output: 96
+    pad: 5
+    kernel_size: 11
+    stride: 4
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: 1
+    scale: 1.6814399
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -5
+    scale: 1.110635
+  }
+}
+layer {
+  name: "conv2d_1_relu"
+  type: "ReLU"
+  bottom: "conv2d_1"
+  top: "conv2d_1"
+}
+layer {
+  name: "batch_normalization_1"
+  type: "BatchNorm"
+  bottom: "conv2d_1"
+  top: "batch_normalization_1"
+  param {
+    lr_mult: 0
+  }
+  param {
+    lr_mult: 0
+  }
+  param {
+    lr_mult: 0
+  }
+  batch_norm_param {
+    moving_average_fraction: 0.99
+    eps: 0.001
+  }
+}
+layer {
+  name: "batch_normalization_1_scale"
+  type: "Scale"
+  bottom: "batch_normalization_1"
+  top: "batch_normalization_1"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "max_pooling2d_1"
+  type: "Pooling"
+  bottom: "batch_normalization_1"
+  top: "max_pooling2d_1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+    pad_h: 0
+    pad_w: 0
+  }
+}
+layer {
+  name: "slice1"
+  type: "Slice"
+  bottom: "max_pooling2d_1"
+  top: "slice1"
+  top: "slice_tmp1"
+  slice_param {
+    slice_point: 27
+    axis: 2
+  }
+}
+layer {
+  name: "slice2"
+  type: "Slice"
+  bottom: "slice1"
+  top: "slice2"
+  top: "slice_tmp2"
+  slice_param {
+    slice_point: 27
+    axis: 3
+  }
+}
+layer {
+  name: "conv2d_2"
+  type: "Convolution"
+  bottom: "slice2"
+  top: "conv2d_2"
+  convolution_param {
+    num_output: 256
+    pad: 2
+    kernel_size: 5
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 0.9170957813791348
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -4
+    scale: 1.3855916
+  }
+}
+layer {
+  name: "conv2d_2_relu"
+  type: "ReLU"
+  bottom: "conv2d_2"
+  top: "conv2d_2"
+}
+layer {
+  name: "batch_normalization_2"
+  type: "BatchNorm"
+  bottom: "conv2d_2"
+  top: "batch_normalization_2"
+  param {
+    lr_mult: 0
+  }
+  param {
+    lr_mult: 0
+  }
+  param {
+    lr_mult: 0
+  }
+  batch_norm_param {
+    moving_average_fraction: 0.99
+    eps: 0.001
+  }
+}
+layer {
+  name: "batch_normalization_2_scale"
+  type: "Scale"
+  bottom: "batch_normalization_2"
+  top: "batch_normalization_2"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "max_pooling2d_2"
+  type: "Pooling"
+  bottom: "batch_normalization_2"
+  top: "max_pooling2d_2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+    pad_h: 0
+    pad_w: 0
+  }
+}
+layer {
+  name: "conv2d_3"
+  type: "Convolution"
+  bottom: "max_pooling2d_2"
+  top: "conv2d_3"
+  convolution_param {
+    num_output: 384
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 2.128039562844658
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -5
+    scale: 1.0625215
+  }
+}
+layer {
+  name: "conv2d_3_relu"
+  type: "ReLU"
+  bottom: "conv2d_3"
+  top: "conv2d_3"
+}
+layer {
+  name: "batch_normalization_3"
+  type: "BatchNorm"
+  bottom: "conv2d_3"
+  top: "batch_normalization_3"
+  param {
+    lr_mult: 0
+  }
+  param {
+    lr_mult: 0
+  }
+  param {
+    lr_mult: 0
+  }
+  batch_norm_param {
+    moving_average_fraction: 0.99
+    eps: 0.001
+  }
+}
+layer {
+  name: "batch_normalization_3_scale"
+  type: "Scale"
+  bottom: "batch_normalization_3"
+  top: "batch_normalization_3"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "conv2d_4"
+  type: "Convolution"
+  bottom: "batch_normalization_3"
+  top: "conv2d_4"
+  convolution_param {
+    num_output: 384
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 1.2497743641169636
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -5
+    scale: 1.1390055
+  }
+}
+layer {
+  name: "conv2d_4_relu"
+  type: "ReLU"
+  bottom: "conv2d_4"
+  top: "conv2d_4"
+}
+layer {
+  name: "batch_normalization_4"
+  type: "BatchNorm"
+  bottom: "conv2d_4"
+  top: "batch_normalization_4"
+  param {
+    lr_mult: 0
+  }
+  param {
+    lr_mult: 0
+  }
+  param {
+    lr_mult: 0
+  }
+  batch_norm_param {
+    moving_average_fraction: 0.99
+    eps: 0.001
+  }
+}
+layer {
+  name: "batch_normalization_4_scale"
+  type: "Scale"
+  bottom: "batch_normalization_4"
+  top: "batch_normalization_4"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "conv2d_5"
+  type: "Convolution"
+  bottom: "batch_normalization_4"
+  top: "conv2d_5"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 1.2862456075709763
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -5
+    scale: 1.9185885
+  }
+}
+layer {
+  name: "conv2d_5_relu"
+  type: "ReLU"
+  bottom: "conv2d_5"
+  top: "conv2d_5"
+}
+layer {
+  name: "batch_normalization_5"
+  type: "BatchNorm"
+  bottom: "conv2d_5"
+  top: "batch_normalization_5"
+  param {
+    lr_mult: 0
+  }
+  param {
+    lr_mult: 0
+  }
+  param {
+    lr_mult: 0
+  }
+  batch_norm_param {
+    moving_average_fraction: 0.99
+    eps: 0.001
+  }
+}
+layer {
+  name: "batch_normalization_5_scale"
+  type: "Scale"
+  bottom: "batch_normalization_5"
+  top: "batch_normalization_5"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "max_pooling2d_3"
+  type: "Pooling"
+  bottom: "batch_normalization_5"
+  top: "max_pooling2d_3"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+    pad_h: 0
+    pad_w: 0
+  }
+}
+layer {
+  name: "flatten_1"
+  type: "Flatten"
+  bottom: "max_pooling2d_3"
+  top: "flatten_1"
+}
+layer {
+  name: "dense_1"
+  type: "InnerProduct"
+  bottom: "flatten_1"
+  top: "dense_1"
+  inner_product_param {
+    num_output: 4096
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 1.352292969292825
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.5942733
+  }
+}
+layer {
+  name: "dense_1_relu"
+  type: "ReLU"
+  bottom: "dense_1"
+  top: "dense_1"
+}
+layer {
+  name: "batch_normalization_6"
+  type: "BatchNorm"
+  bottom: "dense_1"
+  top: "batch_normalization_6"
+  param {
+    lr_mult: 0
+  }
+  param {
+    lr_mult: 0
+  }
+  param {
+    lr_mult: 0
+  }
+  batch_norm_param {
+    moving_average_fraction: 0.99
+    eps: 0.001
+  }
+}
+layer {
+  name: "batch_normalization_6_scale"
+  type: "Scale"
+  bottom: "batch_normalization_6"
+  top: "batch_normalization_6"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "dropout_1"
+  type: "Dropout"
+  bottom: "batch_normalization_6"
+  top: "dropout_1"
+  dropout_param {
+    dropout_ratio: 0.125
+  }
+}
+layer {
+  name: "dense_2"
+  type: "InnerProduct"
+  bottom: "dropout_1"
+  top: "dense_2"
+  inner_product_param {
+    num_output: 4096
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 6.014366806742896
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.0278702
+  }
+}
+layer {
+  name: "dense_2_relu"
+  type: "ReLU"
+  bottom: "dense_2"
+  top: "dense_2"
+}
+layer {
+  name: "batch_normalization_7"
+  type: "BatchNorm"
+  bottom: "dense_2"
+  top: "batch_normalization_7"
+  param {
+    lr_mult: 0
+  }
+  param {
+    lr_mult: 0
+  }
+  param {
+    lr_mult: 0
+  }
+  batch_norm_param {
+    moving_average_fraction: 0.99
+    eps: 0.001
+  }
+}
+layer {
+  name: "batch_normalization_7_scale"
+  type: "Scale"
+  bottom: "batch_normalization_7"
+  top: "batch_normalization_7"
+  scale_param {
+    bias_term: true
+  }
+}
+layer {
+  name: "dropout_2"
+  type: "Dropout"
+  bottom: "batch_normalization_7"
+  top: "dropout_2"
+  dropout_param {
+    dropout_ratio: 0.125
+  }
+}
+layer {
+  name: "dense_3"
+  type: "InnerProduct"
+  bottom: "dropout_2"
+  top: "dense_3"
+  inner_product_param {
+    num_output: 1000
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 17.27446030594692
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.5753708
+  }
+}
+layer {
+  name: "dense_3_relu"
+  type: "Softmax"
+  bottom: "dense_3"
+  top: "dense_3"
+}

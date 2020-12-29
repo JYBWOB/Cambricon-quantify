@@ -1,0 +1,230 @@
+layer {
+  name: "data"
+  type: "Input"
+  top: "input_1"
+  input_param {
+    shape {
+      dim: 1
+      dim: 3
+      dim: 32
+      dim: 32
+    }
+  }
+}
+layer {
+  name: "conv2d_1"
+  type: "Convolution"
+  bottom: "input_1"
+  top: "conv2d_1"
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.984375
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -5
+    scale: 1.6788478
+  }
+}
+layer {
+  name: "max_pooling2d_1"
+  type: "Pooling"
+  bottom: "conv2d_1"
+  top: "max_pooling2d_1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+    pad_h: 0
+    pad_w: 0
+  }
+}
+layer {
+  name: "slice1"
+  type: "Slice"
+  bottom: "max_pooling2d_1"
+  top: "slice1"
+  top: "slice_tmp1"
+  slice_param {
+    slice_point: 15
+    axis: 2
+  }
+}
+layer {
+  name: "slice2"
+  type: "Slice"
+  bottom: "slice1"
+  top: "slice2"
+  top: "slice_tmp2"
+  slice_param {
+    slice_point: 15
+    axis: 3
+  }
+}
+layer {
+  name: "activation_1"
+  type: "ReLU"
+  bottom: "slice2"
+  top: "activation_1"
+}
+layer {
+  name: "lrn_1"
+  type: "LRN"
+  bottom: "activation_1"
+  top: "lrn_1"
+  lrn_param {
+    local_size: 3
+    alpha: 1e-05
+    beta: 0.75
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -15
+    scale: 1.6059235
+  }
+}
+layer {
+  name: "conv2d_2"
+  type: "Convolution"
+  bottom: "lrn_1"
+  top: "conv2d_2"
+  convolution_param {
+    num_output: 32
+    pad: 2
+    kernel_size: 5
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 11.15823080632279
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -6
+    scale: 1.6385469
+  }
+}
+layer {
+  name: "activation_2"
+  type: "ReLU"
+  bottom: "conv2d_2"
+  top: "activation_2"
+}
+layer {
+  name: "average_pooling2d_1"
+  type: "Pooling"
+  bottom: "activation_2"
+  top: "average_pooling2d_1"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+    pad_h: 0
+    pad_w: 0
+  }
+}
+layer {
+  name: "lrn_2"
+  type: "LRN"
+  bottom: "average_pooling2d_1"
+  top: "lrn_2"
+  lrn_param {
+    local_size: 3
+    alpha: 1e-05
+    beta: 0.75
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: -14
+    scale: 1.0752394
+  }
+}
+layer {
+  name: "conv2d_3"
+  type: "Convolution"
+  bottom: "lrn_2"
+  top: "conv2d_3"
+  convolution_param {
+    num_output: 64
+    pad: 2
+    kernel_size: 5
+    stride: 1
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 5.037648812757709
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -7
+    scale: 1.6558752
+  }
+}
+layer {
+  name: "activation_3"
+  type: "ReLU"
+  bottom: "conv2d_3"
+  top: "activation_3"
+}
+layer {
+  name: "average_pooling2d_2"
+  type: "Pooling"
+  bottom: "activation_3"
+  top: "average_pooling2d_2"
+  pooling_param {
+    pool: AVE
+    kernel_size: 3
+    stride: 2
+    pad_h: 0
+    pad_w: 0
+  }
+}
+layer {
+  name: "flatten_1"
+  type: "Flatten"
+  bottom: "average_pooling2d_2"
+  top: "flatten_1"
+}
+layer {
+  name: "dropout_1"
+  type: "Dropout"
+  bottom: "flatten_1"
+  top: "dropout_1"
+  dropout_param {
+    dropout_ratio: 0.15
+  }
+}
+layer {
+  name: "dense_1"
+  type: "InnerProduct"
+  bottom: "dropout_1"
+  top: "dense_1"
+  inner_product_param {
+    num_output: 10
+  }
+  bottom_mlu_dtype {
+    type: DT_INT8
+    position: 0
+    scale: 20.860623556579778
+  }
+  blobs_dtype {
+    type: DT_INT8
+    position: -7
+    scale: 1.2171612
+  }
+}
+layer {
+  name: "dense_1_relu"
+  type: "Softmax"
+  bottom: "dense_1"
+  top: "dense_1"
+}

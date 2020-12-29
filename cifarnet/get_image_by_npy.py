@@ -5,10 +5,11 @@ import matplotlib.pyplot as plt
 import os
 
 from tqdm import tqdm
+import json
 
-netname = 'cifarnet'
-bin_num = 400   # 2048
-MIN_BINS = 50   # 128
+netname = 'alexnet'
+bin_num = 1024   # 2048
+MIN_BINS = 128   # 128
 
 
 MAX_INT = 127
@@ -70,7 +71,6 @@ def get_threshold(data, x, y, bin_num=2048, min_bins=128):
     return x[index + min_bins]
 
 
-
 def KL_divergence(p, q, eps=1e-3):
     if len(p) != len(q):
         print("length of p {0}, length of q {1}".format(len(p), len(q)))
@@ -80,6 +80,15 @@ def KL_divergence(p, q, eps=1e-3):
         value = value + x * np.log((x + eps) / (y + eps))
     return value
 
+def save_dict(filename, dic):
+    '''save dict into json file'''
+    with open(filename,'w') as json_file:
+        json.dump(dic, json_file, ensure_ascii=False)
+
+        
+d = {}
+d['first'] = 'conv2d_1'
+        
 for filename in os.listdir("./layerdata/"):
     if "npy" in filename:
     # if filename == "dense_1.npy":
@@ -111,3 +120,7 @@ for filename in os.listdir("./layerdata/"):
         plt.savefig("./layerdata/" + layer_name + ".png")
         print("\t./layerdata/" + layer_name + '.png saved')
         plt.cla()
+        
+        scale = 1.0 * MAX_INT / threshold
+        d[layer_name] = scale
+save_dict('./layerdata/result.json', d)

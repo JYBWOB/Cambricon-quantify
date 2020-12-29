@@ -7,7 +7,7 @@ import os
 from tqdm import tqdm
 import json
 
-netname = 'alexnet'
+netname = 'vgg64'
 bin_num = 1024   # 2048
 MIN_BINS = 128   # 128
 
