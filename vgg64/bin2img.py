@@ -3,7 +3,7 @@ import cPickle
 from PIL import Image
 import numpy as np
 
-prefix = './data/cifar/'
+prefix = './data/'
 
 batch_size = 10000
 
