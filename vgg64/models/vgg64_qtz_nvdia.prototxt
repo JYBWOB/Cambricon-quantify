@@ -81,7 +81,7 @@ layer {
   bottom_mlu_dtype {
     type: DT_INT8
     position: 0
-    scale: 5.192272505581799
+    scale: 18.41080640868088
   }
   blobs_dtype {
     type: DT_INT8
@@ -159,7 +159,7 @@ layer {
   bottom_mlu_dtype {
     type: DT_INT8
     position: 0
-    scale: 4.04515688493562
+    scale: 16.141201059382485
   }
   blobs_dtype {
     type: DT_INT8
@@ -215,7 +215,7 @@ layer {
   bottom_mlu_dtype {
     type: DT_INT8
     position: 0
-    scale: 4.889959646661531
+    scale: 19.41685731042795
   }
   blobs_dtype {
     type: DT_INT8
@@ -293,7 +293,7 @@ layer {
   bottom_mlu_dtype {
     type: DT_INT8
     position: 0
-    scale: 3.1321067734158796
+    scale: 11.78966506718531
   }
   blobs_dtype {
     type: DT_INT8
@@ -349,7 +349,7 @@ layer {
   bottom_mlu_dtype {
     type: DT_INT8
     position: 0
-    scale: 2.508540361531524
+    scale: 10.009711735000057
   }
   blobs_dtype {
     type: DT_INT8
@@ -430,7 +430,7 @@ layer {
   bottom_mlu_dtype {
     type: DT_INT8
     position: 0
-    scale: 1.8879575685550893
+    scale: 7.533429128328008
   }
   blobs_dtype {
     type: DT_INT8
@@ -492,7 +492,7 @@ layer {
   bottom_mlu_dtype {
     type: DT_INT8
     position: 0
-    scale: 18.891002682838575
+    scale: 42.23777792829599
   }
   blobs_dtype {
     type: DT_INT8

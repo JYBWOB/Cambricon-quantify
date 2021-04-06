@@ -94,7 +94,7 @@ layer {
   bottom_mlu_dtype {
     type: DT_INT8
     position: 0
-    scale: 9.80104598261382
+    scale: 37.007068359304036
   }
   blobs_dtype {
     type: DT_INT8
@@ -166,7 +166,7 @@ layer {
   bottom_mlu_dtype {
     type: DT_INT8
     position: 0
-    scale: 6.230575249647332
+    scale: 23.282675932892662
   }
   blobs_dtype {
     type: DT_INT8
@@ -219,7 +219,7 @@ layer {
   bottom_mlu_dtype {
     type: DT_INT8
     position: 0
-    scale: 6.891813246662568
+    scale: 21.857661115633523
   }
   blobs_dtype {
     type: DT_INT8
