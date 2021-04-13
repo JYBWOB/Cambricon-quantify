@@ -8,7 +8,7 @@ from tqdm import tqdm
 import json
 
 netname = 'alexnet'
-bin_num = 1024  # 2048
+bin_num = 1024   # 2048
 MIN_BINS = 128   # 128
 
 
@@ -143,34 +143,18 @@ for filename in os.listdir("./layerdata/"):
         data = data.flatten()
         data = np.abs(data)
 
-        # x, y = np.unique(data, return_counts=True)
-
         print("\tgenerate histogram data")
         x, y = get_histogram(data, bin_num)
-        print("\tget threshold")
-        threshold_at_num = threshold_distribution(y, MIN_BINS)
-        threshold = x[threshold_at_num]
-
         y = y / float(np.sum(y))
 
         print("\tdraw figure...")
-        # plt.yscale('symlog', linthreshx=0.0000002)
         plt.title('{0}: {1}'.format(netname, layer_name))
         plt.xlabel('Input data')
         plt.ylabel('Normalized number of counts')
-        # plt.ylabel('number of counts')
         
         y_tick = [10**i for i in range(-9, 1)]
         plt.yticks(y_tick)
         
-        plt.vlines(threshold, 0, np.max(y))
-        plt.text(threshold, np.max(y), "%.2f" % (threshold), fontsize=15)
-        # plt.scatter(x, y, marker='o')
         plt.semilogy(x, y, '.', marker='D')
         plt.savefig("./layerdata/" + layer_name + ".png")
-        print("\t./layerdata/" + layer_name + '.png saved')
-        plt.cla()
-        
-        scale = 1.0 * MAX_INT / threshold
-        d[layer_name] = scale
-save_dict('./layerdata/result.json', d)
+	plt.cla()
