@@ -7,13 +7,8 @@ import os
 from tqdm import tqdm
 import json
 
-<<<<<<< HEAD
 netname = 'vgg-like'
 bin_num = 2048  # 2048
-=======
-netname = 'vgg64'
-bin_num = 1024   # 2048
->>>>>>> 3299b84d532aea57a000ffd89ebd26ed70461725
 MIN_BINS = 128   # 128
 
 
@@ -31,7 +26,6 @@ def get_histogram(data, bin_num=2048):
     # y = y / float(np.sum(y))
     return x, y
 
-<<<<<<< HEAD
 import numpy as np
 import copy
 
@@ -126,61 +120,6 @@ def threshold_distribution(distribution,target_bin):
             target_threshold = threshold
 
     return target_threshold, KL_list
-=======
-# def get_threshold(data, x, y, bin_num=2048, min_bins=128):
-#     divergences = []
-#     for i in tqdm(range(min_bins, bin_num)):
-#         # P
-#         reference_distribution_P = y.copy()
-#         reference_distribution_P = reference_distribution_P[:i]
-#         reference_distribution_P[i - 1] += np.sum(reference_distribution_P[i:])
-        
-#         # Q
-#         threshold = x[i]
-#         scale = MAX_INT / threshold
-#         temp_data = data[np.where(data < threshold)]
-#         temp_data = temp_data * scale
-#         temp_data = np.round(temp_data)
-#         _, candidate_distribution_Q = get_histogram(temp_data, i)
-
-#         reference_distribution_P = reference_distribution_P / float(np.sum(reference_distribution_P))
-#         candidate_distribution_Q = candidate_distribution_Q / float(np.sum(candidate_distribution_Q))
-#         divergences.append(KL_divergence(reference_distribution_P, candidate_distribution_Q, eps))
-#     index = divergences.index(min(divergences))
-#     # print(divergences)
-#     return x[index + min_bins]
-
-def get_threshold(data, x, y, bin_num=2048, min_bins=128):
-    divergences = []
-    for i in tqdm(range(min_bins, bin_num)):
-        # P
-        reference_distribution_P = y.copy()
-        
-        # Q
-        threshold = x[i]
-        scale = MAX_INT / threshold
-        temp_data = data[np.where(data < threshold)]
-        temp_data = temp_data * scale
-        temp_data = np.round(temp_data)
-        _, candidate_distribution_Q = get_histogram(temp_data, bin_num)
-
-        reference_distribution_P = reference_distribution_P / float(np.sum(reference_distribution_P))
-        candidate_distribution_Q = candidate_distribution_Q / float(np.sum(candidate_distribution_Q))
-        divergences.append(KL_divergence(reference_distribution_P, candidate_distribution_Q, eps))
-    index = divergences.index(min(divergences))
-    # print(divergences)
-    return x[index + min_bins]
-
-
-def KL_divergence(p, q, eps=1e-3):
-    if len(p) != len(q):
-        print("length of p {0}, length of q {1}".format(len(p), len(q)))
-        return None
-    value = 0
-    for x, y in zip(p, q):
-        value = value + x * np.log((x + eps) / (y + eps))
-    return value
->>>>>>> 3299b84d532aea57a000ffd89ebd26ed70461725
 
 def save_dict(filename, dic):
     '''save dict into json file'''
@@ -206,17 +145,12 @@ for filename in os.listdir("./layerdata/"):
         x, y = get_histogram(data, bin_num)
         y = y / float(np.sum(y))
         print("\tget threshold")
-<<<<<<< HEAD
         threshold_at_num, KL_list = threshold_distribution(y, MIN_BINS)
         threshold = x[threshold_at_num]
-=======
-        threshold = get_threshold(data, x, y, bin_num, MIN_BINS)
->>>>>>> 3299b84d532aea57a000ffd89ebd26ed70461725
 
 
         print("\tdraw figure...")
         # plt.yscale('symlog', linthreshx=0.0000002)
-<<<<<<< HEAD
         plt.title('{0}: {1}'.format(netname, layer_name), fontsize=10)
         plt.xlabel('Input data', fontsize=10)
         plt.ylabel('Normalized number of counts', fontsize=10)
@@ -227,14 +161,6 @@ for filename in os.listdir("./layerdata/"):
         
         plt.vlines(threshold, 0, np.max(y))
         plt.text(threshold, np.max(y), "%.2f" % (threshold), fontsize=15)
-=======
-        plt.title('{0}: {1}'.format(netname, layer_name))
-        plt.xlabel('Input data')
-        plt.ylabel('Normalized number of counts')
-        # plt.ylabel('number of counts')
-        plt.vlines(threshold, 0, np.max(y))
-        plt.text(threshold, np.max(y), "%.2f"%format(threshold), fontsize=15)
->>>>>>> 3299b84d532aea57a000ffd89ebd26ed70461725
         # plt.scatter(x, y, marker='o')
         plt.semilogy(x, y, '.', marker='D')
         plt.savefig("./layerdata/" + netname + "_" + layer_name + ".png")
