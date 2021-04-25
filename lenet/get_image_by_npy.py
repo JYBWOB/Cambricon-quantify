@@ -7,7 +7,7 @@ import os
 from tqdm import tqdm
 import json
 
-netname = 'alexnet'
+netname = 'lenet'
 bin_num = 1024   # 2048
 MIN_BINS = 128   # 128
 
@@ -156,15 +156,15 @@ for filename in os.listdir("./layerdata/"):
         print("\tdraw figure...")
         # plt.yscale('symlog', linthreshx=0.0000002)
         plt.title('{0}: {1}'.format(netname, layer_name))
-        plt.xlabel('Activation value')
-        # plt.ylabel('Normalized number of counts')
-        plt.ylabel('number of counts')
+        plt.xlabel('Input data')
+        plt.ylabel('Normalized number of counts')
+        # plt.ylabel('number of counts')
         
         y_tick = [10**i for i in range(-9, 1)]
         plt.yticks(y_tick)
         
         plt.vlines(threshold, 0, np.max(y))
-        plt.text(threshold, np.max(y), "{0}, maxval={1}".format(threshold, np.max(data)), fontsize=15)
+        plt.text(threshold, np.max(y), "%.2f"%threshold, fontsize=15)
         # plt.scatter(x, y, marker='o')
         plt.semilogy(x, y, '.', marker='D')
         plt.savefig("./layerdata/" + layer_name + ".png")

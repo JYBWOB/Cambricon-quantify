@@ -148,9 +148,11 @@ for filename in os.listdir("./layerdata/"):
         y = y / float(np.sum(y))
 
         print("\tdraw figure...")
-        plt.title('{0}: {1}'.format(netname, layer_name))
-        plt.xlabel('Input data')
-        plt.ylabel('Normalized number of counts')
+        plt.title('{0}: {1}'.format(netname, layer_name), fontsize=15)
+        plt.xlabel('Input data', fontsize=15)
+        plt.ylabel('Normalized number of counts', fontsize=15)
+	plt.yticks(fontsize=10)
+	plt.xticks(fontsize=10)
         
         y_tick = [10**i for i in range(-9, 1)]
         plt.yticks(y_tick)
