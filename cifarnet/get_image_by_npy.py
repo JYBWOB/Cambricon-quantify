@@ -8,8 +8,8 @@ from tqdm import tqdm
 import json
 
 netname = 'cifarnet'
-bin_num = 1024   # 2048
-MIN_BINS = 520   # 128
+bin_num = 2048  # 2048
+MIN_BINS = 128   # 128
 
 
 MAX_INT = 127
@@ -35,26 +35,26 @@ def compute_kl_divergence(P,Q):
     for i in range(length):
         if P[i]!=0:
             if Q[i]==0:
-                sum+=1
+                sum+=1.0
             else:
-                sum+=P[i]*np.log(P[i]/Q[i])
+                sum+=P[i]*np.log((P[i]+1e-5)/(Q[i]+1e-5))
     return sum
 
 
 def threshold_distribution(distribution,target_bin):
+    KL_list = []
+    
     target_threshold = target_bin
     min_kl_divergence = 10000000000000
     length = len(distribution)
 
-
-
-    for threshold in range(target_bin,length):
+    for threshold in tqdm(range(target_bin,length)):
         #t_distribution=np.empty((threshold,))
         t_distribution=copy.deepcopy(distribution[0:threshold])
         t_distribution[threshold - 1] += np.sum(distribution[threshold:])
 
         #get P
-        num_per_bin = threshold / target_bin
+        num_per_bin = float(threshold) / float(target_bin)
 
         quantize_distribution = np.zeros((target_bin,))
 
@@ -85,14 +85,14 @@ def threshold_distribution(distribution,target_bin):
             count = 0
 
             left_upper = int(np.ceil(start))
-            left_scale = 0
+            left_scale = 0.0
             if left_upper > start:
                 left_scale = left_upper - start
                 if t_distribution[left_upper - 1] != 0:
                     count += left_scale
 
             right_lower = int(np.floor(end))
-            right_scale = 0
+            right_scale = 0.0
             if right_lower < end:
                 right_scale = end - right_lower
                 if t_distribution[right_lower] != 0:
@@ -113,22 +113,18 @@ def threshold_distribution(distribution,target_bin):
             for j in range(left_upper,right_lower):
                 if t_distribution[j] != 0:
                     expand_distribution[j] += expand_value
-
         kl_divergence = compute_kl_divergence(t_distribution, expand_distribution)
-
-        #print(threshold,kl_divergence)
-
+        KL_list.append(kl_divergence)
         if kl_divergence < min_kl_divergence:
             min_kl_divergence = kl_divergence
             target_threshold = threshold
 
-    return target_threshold
+    return target_threshold, KL_list
 
 def save_dict(filename, dic):
     '''save dict into json file'''
     with open(filename,'w') as json_file:
         json.dump(dic, json_file, ensure_ascii=False)
-
         
 d = {}
 d['first'] = 'conv2d_1'
@@ -147,28 +143,41 @@ for filename in os.listdir("./layerdata/"):
 
         print("\tgenerate histogram data")
         x, y = get_histogram(data, bin_num)
+        y = y / float(np.sum(y))
         print("\tget threshold")
-        threshold_at_num = threshold_distribution(y, MIN_BINS)
+        threshold_at_num, KL_list = threshold_distribution(y, MIN_BINS)
         threshold = x[threshold_at_num]
 
-        y = y / float(np.sum(y))
 
         print("\tdraw figure...")
         # plt.yscale('symlog', linthreshx=0.0000002)
-        plt.title('{0}: {1}'.format(netname, layer_name))
-        plt.xlabel('Input data')
-        plt.ylabel('Normalized number of counts')
-        # plt.ylabel('Input data')
+        plt.title('{0}: {1}'.format(netname, layer_name), fontsize=10)
+        plt.xlabel('Input data', fontsize=10)
+        plt.ylabel('Normalized number of counts', fontsize=10)
+        # plt.ylabel('number of counts')
         
         y_tick = [10**i for i in range(-9, 1)]
         plt.yticks(y_tick)
         
         plt.vlines(threshold, 0, np.max(y))
-        plt.text(threshold, np.max(y), "%.2f"%threshold, fontsize=15)
+        plt.text(threshold, np.max(y), "%.2f" % (threshold), fontsize=15)
         # plt.scatter(x, y, marker='o')
         plt.semilogy(x, y, '.', marker='D')
-        plt.savefig("./layerdata/" + layer_name + ".png")
-        print("\t./layerdata/" + layer_name + '.png saved')
+        plt.savefig("./layerdata/" + netname + "_" + layer_name + ".png")
+        print("\t./layerdata/" +  netname + "_" + layer_name + '.png saved')
+        plt.cla()
+        
+        plt.title('{0}: {1}'.format(netname, layer_name), fontsize=15)
+        plt.xlabel('Input data', fontsize=15)
+        plt.ylabel('KL-divergence', fontsize=15)
+        # plt.ylabel('number of counts')
+        
+        y_tick = [10**i for i in range(-9, 1)]
+        plt.yticks(y_tick)
+        # plt.scatter(x[MIN_BINS:], KL_list, marker='o')
+        plt.semilogy(x[MIN_BINS:], KL_list, '.', marker='D')
+        plt.savefig("./layerdata/" + netname + "_" + layer_name + "_KL" + ".png")
+        print("\t./layerdata/" +  netname + "_" + layer_name + '.png saved')
         plt.cla()
         
         scale = 1.0 * MAX_INT / threshold
